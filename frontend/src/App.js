@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Lock, User, Phone, Eye, EyeOff, CheckCircle, AlertCircle, Loader, ArrowRight, Shield, LogOut, Home, Package, Users, ShoppingCart, BarChart3, Menu, X, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Mail, Lock, User, Phone, Eye, EyeOff, CheckCircle, AlertCircle, Loader, ArrowRight, Shield, LogOut, Home, Package, Users, ShoppingCart, BarChart3, Menu, X, Search, ChevronLeft, ChevronRight, TrendingUp, Activity, FileText, UserCircle, DollarSign, Calendar } from 'lucide-react';
 import CustomerApp from './CustomerApp';
+import Pagination from './components/Pagination';
+import Card from './components/Card';
+import Button from './components/Button';
+import StatCard from './components/StatCard';
+import Badge from './components/Badge';
+import Alert from './components/Alert';
+import SimpleBarChart from './components/SimpleBarChart';
+import SimplePieChart from './components/SimplePieChart';
 
 // API Configuration
 const API_BASE_URL = 'http://localhost:8080/api';
@@ -152,76 +160,94 @@ const LoginPage = ({ onLogin, onSwitchToSignup, onSwitchToForgotPassword }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-          {/* Logo & Title */}
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mb-4">
-              <Shield className="w-8 h-8 text-white" />
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4"
+      style={{
+        backgroundImage: 'url("https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=1920&q=80")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Animated Background Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/40 via-blue-600/30 to-indigo-600/40 backdrop-blur-sm animate-pulse"></div>
+      
+      {/* Floating Particles Animation */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-blob animation-delay-2000 top-0 left-0"></div>
+        <div className="absolute w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-blob top-0 right-0"></div>
+        <div className="absolute w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl animate-blob animation-delay-4000 bottom-0 left-1/2"></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10 animate-fadeInUp">
+        {/* Glassmorphism Card */}
+        <div className="bg-white/20 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-8 space-y-6 hover:shadow-cyan-500/20 transition-all duration-500">
+          {/* Logo & Title with Animation */}
+          <div className="text-center space-y-3 animate-slideDown">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-full mb-4 shadow-2xl shadow-cyan-500/50 animate-bounce-slow">
+              <Shield className="w-10 h-10 text-white drop-shadow-lg" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-              Pharmacy Management
+            <h1 className="text-4xl font-bold text-white drop-shadow-2xl animate-glow">
+              Staff Login
             </h1>
-            <p className="text-gray-600">Sign in to your account</p>
+            <p className="text-white/90 font-medium drop-shadow-lg">Welcome back! Please login to your account</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
-              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="bg-red-500/20 backdrop-blur-xl border border-red-300/50 rounded-2xl p-4 flex items-start gap-3 animate-shake">
+              <AlertCircle className="w-5 h-5 text-red-100 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-50 font-medium">{error}</p>
             </div>
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="animate-slideInLeft">
+              <label className="block text-sm font-bold text-white/90 mb-2 drop-shadow-lg">Email Address</label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70 group-focus-within:text-cyan-300 transition-colors z-10" />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                  placeholder="your@email.com"
+                  className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-xl border-2 border-white/30 rounded-2xl text-white placeholder:text-white/50 focus:bg-white/20 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30 transition-all duration-300 shadow-lg"
+                  placeholder="staff@pharmacy.com"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <div className="animate-slideInRight">
+              <label className="block text-sm font-bold text-white/90 mb-2 drop-shadow-lg">Password</label>
+              <div className="relative group">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70 group-focus-within:text-cyan-300 transition-colors z-10" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full pl-12 pr-14 py-4 bg-white/10 backdrop-blur-xl border-2 border-white/30 rounded-2xl text-white placeholder:text-white/50 focus:bg-white/20 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30 transition-all duration-300 shadow-lg"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-cyan-300 transition-colors z-10"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                <span className="text-gray-600">Remember me</span>
+            <div className="flex items-center justify-between text-sm animate-fadeIn">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <input type="checkbox" className="w-4 h-4 rounded border-2 border-white/50 bg-white/10 text-cyan-500 focus:ring-2 focus:ring-cyan-400/50 transition-all" />
+                <span className="text-white/90 font-medium group-hover:text-white transition-colors">Remember me</span>
               </label>
               <button
                 type="button"
                 onClick={onSwitchToForgotPassword}
-                className="text-blue-600 hover:text-blue-700 font-medium"
+                className="text-cyan-200 hover:text-white font-bold transition-colors"
               >
                 Forgot password?
               </button>
@@ -230,15 +256,16 @@ const LoginPage = ({ onLogin, onSwitchToSignup, onSwitchToForgotPassword }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-bold text-lg hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 hover:shadow-2xl hover:shadow-cyan-500/50 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3 shadow-xl animate-pulse-slow"
             >
               {loading ? (
                 <>
-                  <Loader className="w-5 h-5 animate-spin" />
+                  <Loader className="w-6 h-6 animate-spin" />
                   Signing in...
                 </>
               ) : (
                 <>
+                  <Shield className="w-5 h-5" />
                   Sign In
                   <ArrowRight className="w-5 h-5" />
                 </>
@@ -247,11 +274,20 @@ const LoginPage = ({ onLogin, onSwitchToSignup, onSwitchToForgotPassword }) => {
           </form>
 
           {/* Sign Up Link */}
-          <div className="text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <button onClick={onSwitchToSignup} className="text-blue-600 hover:text-blue-700 font-semibold">
-              Sign up
-            </button>
+          <div className="text-center text-sm animate-fadeIn">
+            <p className="text-white/80 font-medium">
+              Don't have an account?{' '}
+              <button onClick={onSwitchToSignup} className="text-cyan-200 hover:text-white font-bold transition-colors underline decoration-2 underline-offset-4">
+                Sign up
+              </button>
+            </p>
+          </div>
+
+          {/* Footer Text */}
+          <div className="text-center pt-4 border-t border-white/20">
+            <p className="text-xs text-white/60">
+              🏥 Pharmacy Management System v2.0
+            </p>
           </div>
         </div>
       </div>
@@ -1059,12 +1095,18 @@ const Dashboard = ({ user, onLogout }) => {
   const [companies, setCompanies] = useState([]);
   const [pagination, setPagination] = useState({
     pageNumber: 0,
-    pageSize: 10,
+    pageSize: 5,
     totalPages: 0,
     totalElements: 0,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState({
+    salesByCategory: [],
+    salesTrend: [],
+    topMedicines: [],
+    revenueByMonth: []
+  });
   
   // Modal states
   const [showAddMedicineModal, setShowAddMedicineModal] = useState(false);
@@ -1116,20 +1158,30 @@ const Dashboard = ({ user, onLogout }) => {
       let response;
       if (currentPage === 'users') {
         response = await apiCall('/users');
-        setUsers(Array.isArray(response) ? response : (response.content || []));
+        const data = Array.isArray(response) ? response : (response.content || []);
+        setUsers(data);
+        setPagination(prev => ({ ...prev, totalPages: Math.ceil(data.length / prev.pageSize), totalElements: data.length }));
       } else if (currentPage === 'medicines') {
         response = await apiCall('/medicines');
         console.log('Medicines response:', response);
-        setMedicines(Array.isArray(response) ? response : (response.content || []));
+        const data = Array.isArray(response) ? response : (response.content || []);
+        setMedicines(data);
+        setPagination(prev => ({ ...prev, totalPages: Math.ceil(data.length / prev.pageSize), totalElements: data.length }));
       } else if (currentPage === 'sales') {
         response = await apiCall('/sales');
-        setSales(Array.isArray(response) ? response : (response.content || []));
+        const data = Array.isArray(response) ? response : (response.content || []);
+        setSales(data);
+        setPagination(prev => ({ ...prev, totalPages: Math.ceil(data.length / prev.pageSize), totalElements: data.length }));
       } else if (currentPage === 'agents') {
         response = await apiCall('/agents');
-        setAgents(Array.isArray(response) ? response : (response.content || []));
+        const data = Array.isArray(response) ? response : (response.content || []);
+        setAgents(data);
+        setPagination(prev => ({ ...prev, totalPages: Math.ceil(data.length / prev.pageSize), totalElements: data.length }));
       } else if (currentPage === 'companies') {
         response = await apiCall('/companies');
-        setCompanies(Array.isArray(response) ? response : (response.content || []));
+        const data = Array.isArray(response) ? response : (response.content || []);
+        setCompanies(data);
+        setPagination(prev => ({ ...prev, totalPages: Math.ceil(data.length / prev.pageSize), totalElements: data.length }));
       }
     } catch (err) {
       console.error('Failed to fetch data:', err);
@@ -1142,6 +1194,13 @@ const Dashboard = ({ user, onLogout }) => {
     setPagination({ ...pagination, pageNumber: newPage });
   };
 
+  // Helper function to get paginated data
+  const getPaginatedData = (data) => {
+    const startIndex = pagination.pageNumber * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    return data.slice(startIndex, endIndex);
+  };
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'medicines', label: 'Medicines', icon: Package },
@@ -1149,28 +1208,31 @@ const Dashboard = ({ user, onLogout }) => {
     { id: 'users', label: 'Users', icon: Users },
     { id: 'agents', label: 'Agents', icon: User },
     { id: 'companies', label: 'Companies', icon: Package },
-    { id: 'reports', label: 'Reports', icon: BarChart3 },
+    { id: 'analytics', label: 'Analytics', icon: Activity },
+    { id: 'reports', label: 'Reports', icon: FileText },
+    { id: 'profile', label: 'Profile', icon: UserCircle },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Top Navigation */}
-      <nav className="bg-white shadow-sm sticky top-0 z-40">
+      <nav className="bg-gradient-to-r from-white via-cyan-50 to-blue-50 shadow-lg border-b border-cyan-100 sticky top-0 z-40">
         <div className="max-w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+                className="lg:hidden p-2 rounded-xl hover:bg-cyan-100 transition-all"
               >
-                {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {sidebarOpen ? <X className="w-6 h-6 text-slate-700" /> : <Menu className="w-6 h-6 text-slate-700" />}
               </button>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-5 h-5 text-white" />
+                <div className="w-11 h-11 bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl shadow-cyan-500/50 animate-pulse">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div className="hidden sm:block">
-                  <h1 className="text-xl font-bold text-gray-900">Pharmacy</h1>
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Pharmacy MS</h1>
+                  <p className="text-xs text-slate-500">Management System</p>
                 </div>
               </div>
             </div>
@@ -1178,33 +1240,33 @@ const Dashboard = ({ user, onLogout }) => {
             {/* Global Search */}
             <div className="hidden md:block flex-1 max-w-md mx-8">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent focus:bg-white transition"
+                  placeholder="Search anything..."
+                  className="w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-cyan-200 focus:border-cyan-500 transition-all shadow-sm"
                 />
               </div>
             </div>
 
             {/* User Menu */}
             <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-white rounded-xl shadow-md border border-slate-200">
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
+                  <p className="text-sm font-bold text-slate-900">{user.firstName} {user.lastName}</p>
+                  <Badge variant="primary" size="sm">{user.role}</Badge>
                 </div>
                 <img 
                   src={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=0ea5e9&color=fff`} 
                   alt={user.firstName} 
-                  className="w-10 h-10 rounded-full shadow-md"
+                  className="w-10 h-10 rounded-full shadow-lg ring-2 ring-cyan-500"
                 />
               </div>
               <button
                 onClick={onLogout}
-                className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                className="flex items-center gap-2 px-4 py-2 text-rose-600 hover:text-white hover:bg-gradient-to-r hover:from-rose-500 hover:to-red-600 rounded-xl transition-all shadow-md hover:shadow-lg"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -1216,13 +1278,13 @@ const Dashboard = ({ user, onLogout }) => {
       <div className="flex">
         {/* Sidebar */}
         <aside className={`
-          fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-slate-900 z-30
+          fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 z-30 shadow-2xl
           transform transition-transform duration-300 lg:transform-none
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
           <div className="p-4">
             <div className="mb-6">
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Main Menu</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-4">Main Menu</h3>
             </div>
             <nav className="space-y-1">
               {menuItems.map((item) => {
@@ -1237,15 +1299,15 @@ const Dashboard = ({ user, onLogout }) => {
                       setSearchTerm('');
                     }}
                     className={`
-                      w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all
+                      w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                       ${currentPage === item.id
-                        ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/50 scale-105'
+                        : 'text-slate-300 hover:bg-slate-800 hover:text-white hover:scale-105 hover:shadow-lg'
                       }
                     `}
                   >
                     <Icon className="w-5 h-5" />
-                    <span className="font-medium">{item.label}</span>
+                    <span className="font-semibold">{item.label}</span>
                   </button>
                 );
               })}
@@ -1267,57 +1329,37 @@ const Dashboard = ({ user, onLogout }) => {
               
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-blue-50 rounded-xl">
-                      <Users className="w-6 h-6 text-blue-600" />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-500">Total Users</p>
-                    <p className="text-3xl font-bold text-gray-900">{stats.totalUsers || 0}</p>
-                    <p className="text-xs text-gray-400">{stats.active || 0} active users</p>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-emerald-50 rounded-xl">
-                      <Package className="w-6 h-6 text-emerald-600" />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-500">Medicines</p>
-                    <p className="text-3xl font-bold text-gray-900">{stats.totalMedicines || 0}</p>
-                    <p className="text-xs text-red-500">{stats.lowStockMedicines || 0} low stock</p>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-purple-50 rounded-xl">
-                      <ShoppingCart className="w-6 h-6 text-purple-600" />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-500">Total Sales</p>
-                    <p className="text-3xl font-bold text-gray-900">{stats.totalSales || 0}</p>
-                    <p className="text-xs text-gray-400">All time sales</p>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-orange-50 rounded-xl">
-                      <BarChart3 className="w-6 h-6 text-orange-600" />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                    <p className="text-3xl font-bold text-gray-900">{Number(stats.totalRevenue || 0).toFixed(0)}</p>
-                    <p className="text-xs text-gray-400">RWF {Number(stats.todayRevenue || 0).toFixed(0)} today</p>
-                  </div>
-                </div>
+                <StatCard
+                  title="Total Users"
+                  value={stats.totalUsers || 0}
+                  icon={Users}
+                  color="blue"
+                  description={`${stats.active || 0} active users`}
+                />
+                
+                <StatCard
+                  title="Medicines"
+                  value={stats.totalMedicines || 0}
+                  icon={Package}
+                  color="green"
+                  description={`${stats.lowStockMedicines || 0} low stock`}
+                />
+                
+                <StatCard
+                  title="Total Sales"
+                  value={stats.totalSales || 0}
+                  icon={ShoppingCart}
+                  color="purple"
+                  description="All time sales"
+                />
+                
+                <StatCard
+                  title="Total Revenue"
+                  value={`RWF ${Number(stats.totalRevenue || 0).toLocaleString()}`}
+                  icon={BarChart3}
+                  color="orange"
+                  description={`RWF ${Number(stats.todayRevenue || 0).toLocaleString()} today`}
+                />
               </div>
 
               {/* Quick Actions */}
@@ -1370,24 +1412,19 @@ const Dashboard = ({ user, onLogout }) => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Users Management</h2>
-                  <p className="text-sm text-gray-500 mt-1">Manage system users and permissions</p>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Users Management</h2>
+                  <p className="text-sm text-slate-500 mt-2 flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Manage system users and permissions
+                  </p>
                 </div>
                 <div className="flex gap-3">
-                  <button 
-                    onClick={() => exportToCSV(users, 'users')}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
-                  >
-                    <BarChart3 className="w-4 h-4" />
+                  <Button variant="outline" onClick={() => exportToCSV(users, 'users')} icon={BarChart3}>
                     Export
-                  </button>
-                  <button 
-                    onClick={() => setShowAddUserModal(true)}
-                    className="px-4 py-2.5 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/30"
-                  >
-                    <User className="w-4 h-4" />
+                  </Button>
+                  <Button variant="primary" onClick={() => setShowAddUserModal(true)} icon={User}>
                     Add User
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -1397,45 +1434,48 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <Card className="overflow-hidden p-0">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-gradient-to-r from-slate-50 via-cyan-50 to-blue-50 border-b-2 border-cyan-200">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Role</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Phone</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Role</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {users.map((u) => (
-                          <tr key={u.id} className="hover:bg-slate-50 transition">
+                        {getPaginatedData(users).map((u) => (
+                          <tr key={u.id} className="hover:bg-gradient-to-r hover:from-cyan-50 hover:to-blue-50 transition-all duration-200 group">
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{u.firstName} {u.lastName}</div>
+                              <div className="flex items-center gap-3">
+                                <img 
+                                  src={`https://ui-avatars.com/api/?name=${u.firstName}+${u.lastName}&background=0ea5e9&color=fff`}
+                                  alt={u.firstName}
+                                  className="w-10 h-10 rounded-full shadow-md group-hover:shadow-lg transition-shadow"
+                                />
+                                <div className="font-semibold text-slate-900">{u.firstName} {u.lastName}</div>
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{u.email}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{u.phone}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{u.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{u.phone}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                {u.role}
-                              </span>
+                              <Badge variant="info">{u.role}</Badge>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                                u.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                              }`}>
+                              <Badge variant={u.active ? 'success' : 'danger'}>
                                 {u.active ? 'Active' : 'Inactive'}
-                              </span>
+                              </Badge>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
+                  </Card>
 
                   {/* Pagination */}
-                  <Pagination pagination={pagination} onPageChange={handlePageChange} />
+                  {users.length > 0 && <Pagination currentPage={pagination.pageNumber} totalPages={pagination.totalPages} onPageChange={handlePageChange} />}
                 </>
               )}
             </div>
@@ -1446,31 +1486,22 @@ const Dashboard = ({ user, onLogout }) => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Medicines Inventory</h2>
-                  <p className="text-sm text-gray-500 mt-1">Track and manage medicine stock</p>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Medicines Inventory</h2>
+                  <p className="text-sm text-slate-500 mt-2 flex items-center gap-2">
+                    <Package className="w-4 h-4" />
+                    Track and manage medicine stock
+                  </p>
                 </div>
                 <div className="flex gap-3">
-                  <button 
-                    onClick={() => window.print()}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
-                  >
-                    <BarChart3 className="w-4 h-4" />
+                  <Button variant="outline" onClick={() => window.print()} icon={BarChart3}>
                     Print
-                  </button>
-                  <button 
-                    onClick={() => exportToCSV(medicines, 'medicines')}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
-                  >
-                    <BarChart3 className="w-4 h-4" />
+                  </Button>
+                  <Button variant="secondary" onClick={() => exportToCSV(medicines, 'medicines')} icon={BarChart3}>
                     Export
-                  </button>
-                  <button 
-                    onClick={() => setShowAddMedicineModal(true)}
-                    className="px-4 py-2.5 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/30"
-                  >
-                    <Package className="w-4 h-4" />
+                  </Button>
+                  <Button variant="success" onClick={() => setShowAddMedicineModal(true)} icon={Package}>
                     Add Medicine
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -1480,41 +1511,47 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <Card className="overflow-hidden p-0">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-gradient-to-r from-slate-50 via-emerald-50 to-green-50 border-b-2 border-emerald-200">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Category</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Price</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Quantity</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Expiry</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Medicine</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Category</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Price</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Stock</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">Expiry</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {medicines && medicines.length > 0 ? medicines.map((m) => (
-                          <tr key={m.id} className="hover:bg-slate-50 transition">
+                        {medicines && medicines.length > 0 ? getPaginatedData(medicines).map((m) => (
+                          <tr key={m.id} className="hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 transition-all duration-200 group">
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{m.name}</div>
-                              <div className="text-sm text-gray-500">{m.batchNumber || 'N/A'}</div>
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-gradient-to-br from-emerald-100 to-green-100 rounded-lg group-hover:shadow-md transition-shadow">
+                                  <Package className="w-5 h-5 text-emerald-600" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-slate-900">{m.name}</div>
+                                  <div className="text-xs text-slate-500">{m.batchNumber || 'N/A'}</div>
+                                </div>
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                                {m.category}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              RWF {Number(m.sellingPrice || 0).toFixed(2)}
+                              <Badge variant="purple">{m.category}</Badge>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                                (m.quantity || 0) < 20 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                              }`}>
-                                {m.quantity || 0}
-                              </span>
+                              <span className="text-sm font-bold text-emerald-600">RWF {Number(m.sellingPrice || 0).toLocaleString()}</span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {m.expiryDate || 'N/A'}
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Badge variant={(m.quantity || 0) < 20 ? 'danger' : 'success'}>
+                                {m.quantity || 0} units
+                              </Badge>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <Calendar className="w-4 h-4" />
+                                {m.expiryDate || 'N/A'}
+                              </div>
                             </td>
                           </tr>
                         )) : (
@@ -1526,10 +1563,10 @@ const Dashboard = ({ user, onLogout }) => {
                         )}
                       </tbody>
                     </table>
-                  </div>
+                  </Card>
 
                   {/* Pagination */}
-                  <Pagination pagination={pagination} onPageChange={handlePageChange} />
+                  {medicines.length > 0 && <Pagination currentPage={pagination.pageNumber} totalPages={pagination.totalPages} onPageChange={handlePageChange} />}
                 </>
               )}
             </div>
@@ -1539,32 +1576,43 @@ const Dashboard = ({ user, onLogout }) => {
           {currentPage === 'sales' && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Sales Records</h2>
-                  <p className="text-sm text-gray-500 mt-1">View and manage all sales transactions</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-xl shadow-purple-500/30">
+                    <ShoppingCart className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Sales Records</h2>
+                    <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                      <Activity className="w-4 h-4" />
+                      View and manage all sales transactions
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-3">
-                  <button 
+                  <Button 
                     onClick={() => printSalesReceipt(sales)}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
+                    variant="outline"
+                    className="shadow-lg"
                   >
                     <BarChart3 className="w-4 h-4" />
                     Print
-                  </button>
-                  <button 
+                  </Button>
+                  <Button 
                     onClick={() => exportToCSV(sales, 'sales')}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
+                    variant="outline"
+                    className="shadow-lg"
                   >
                     <BarChart3 className="w-4 h-4" />
                     Export
-                  </button>
-                  <button 
+                  </Button>
+                  <Button 
                     onClick={() => setShowNewSaleModal(true)}
-                    className="px-4 py-2.5 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/30"
+                    variant="primary"
+                    className="shadow-lg shadow-purple-500/30"
                   >
                     <ShoppingCart className="w-4 h-4" />
                     New Sale
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -1574,44 +1622,63 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <Card className="overflow-hidden">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-gradient-to-r from-slate-50 via-purple-50 to-pink-50 border-b-2 border-purple-200">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Customer</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Medicine</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Quantity</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Total</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">Customer</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">Medicine</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">Quantity</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-purple-900 uppercase tracking-wider">Total</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {sales.map((s) => (
-                          <tr key={s.id} className="hover:bg-slate-50 transition">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {new Date(s.saleDate).toLocaleDateString()}
+                        {getPaginatedData(sales).map((s) => (
+                          <tr key={s.id} className="hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <div className="w-10 h-10 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
+                                  <Calendar className="w-5 h-5 text-purple-600" />
+                                </div>
+                                <span className="text-sm font-medium text-slate-700">
+                                  {new Date(s.saleDate).toLocaleDateString()}
+                                </span>
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{s.customerName}</div>
-                              <div className="text-sm text-gray-500">{s.customerPhone}</div>
+                              <div className="flex items-center gap-3">
+                                <img 
+                                  src={`https://ui-avatars.com/api/?name=${s.customerName?.replace(' ', '+')}&background=a855f7&color=fff`} 
+                                  alt={s.customerName} 
+                                  className="w-10 h-10 rounded-full shadow-md"
+                                />
+                                <div>
+                                  <div className="font-bold text-slate-900">{s.customerName}</div>
+                                  <div className="text-xs text-slate-500">{s.customerPhone}</div>
+                                </div>
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {s.medicine?.name || 'N/A'}
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <Package className="w-4 h-4 text-purple-500" />
+                                <span className="text-sm font-medium text-slate-900">{s.medicine?.name || 'N/A'}</span>
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {s.quantity || 0}
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Badge variant="secondary">{s.quantity || 0} units</Badge>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              RWF {Number(s.totalPrice || 0).toFixed(2)}
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-bold text-purple-600">RWF {Number(s.totalPrice || 0).toFixed(2)}</div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
+                  </Card>
 
                   {/* Pagination */}
-                  <Pagination pagination={pagination} onPageChange={handlePageChange} />
+                  {sales.length > 0 && pagination.totalPages > 1 && <Pagination currentPage={pagination.pageNumber} totalPages={pagination.totalPages} onPageChange={handlePageChange} />}
                 </>
               )}
             </div>
@@ -1621,25 +1688,35 @@ const Dashboard = ({ user, onLogout }) => {
           {currentPage === 'agents' && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Agents Management</h2>
-                  <p className="text-sm text-gray-500 mt-1">Manage pharmaceutical agents and representatives</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl shadow-indigo-500/30">
+                    <Users className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Agents Management</h2>
+                    <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      Manage pharmaceutical agents and representatives
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-3">
-                  <button 
+                  <Button 
                     onClick={() => exportToCSV(agents, 'agents')}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
+                    variant="outline"
+                    className="shadow-lg"
                   >
                     <BarChart3 className="w-4 h-4" />
                     Export
-                  </button>
-                  <button 
+                  </Button>
+                  <Button 
                     onClick={() => setShowAddAgentModal(true)}
-                    className="px-4 py-2.5 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/30"
+                    variant="primary"
+                    className="shadow-lg shadow-indigo-500/30"
                   >
                     <User className="w-4 h-4" />
                     Add Agent
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -1649,37 +1726,47 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <Card className="overflow-hidden">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-gradient-to-r from-slate-50 via-indigo-50 to-purple-50 border-b-2 border-indigo-200">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Company</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Medicines</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-indigo-900 uppercase tracking-wider">Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-indigo-900 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-indigo-900 uppercase tracking-wider">Phone</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-indigo-900 uppercase tracking-wider">Company</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-indigo-900 uppercase tracking-wider">Medicines</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {agents.map((agent) => (
-                          <tr key={agent.id} className="hover:bg-slate-50 transition">
+                        {getPaginatedData(agents).map((agent) => (
+                          <tr key={agent.id} className="hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all">
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{agent.firstName} {agent.lastName}</div>
+                              <div className="flex items-center gap-3">
+                                <img 
+                                  src={`https://ui-avatars.com/api/?name=${agent.firstName}+${agent.lastName}&background=6366f1&color=fff`} 
+                                  alt={`${agent.firstName} ${agent.lastName}`} 
+                                  className="w-10 h-10 rounded-full shadow-md"
+                                />
+                                <span className="font-bold text-slate-900">{agent.firstName} {agent.lastName}</span>
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{agent.email}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{agent.phone}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{agent.companyName || 'N/A'}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{agent.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">{agent.phone}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                              <Badge variant="secondary">{agent.companyName || 'N/A'}</Badge>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Badge variant="primary">
+                                <Package className="w-3 h-3" />
                                 {agent.medicineCount || 0} medicines
-                              </span>
+                              </Badge>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
-                  {pagination.totalPages > 1 && <Pagination pagination={pagination} onPageChange={handlePageChange} />}
+                  </Card>
+                  {agents.length > 0 && pagination.totalPages > 1 && <Pagination currentPage={pagination.pageNumber} totalPages={pagination.totalPages} onPageChange={handlePageChange} />}
                 </>
               )}
             </div>
@@ -1689,25 +1776,35 @@ const Dashboard = ({ user, onLogout }) => {
           {currentPage === 'companies' && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Companies Management</h2>
-                  <p className="text-sm text-gray-500 mt-1">Manage pharmaceutical companies and suppliers</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl shadow-teal-500/30">
+                    <Package className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Companies Management</h2>
+                    <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                      <Package className="w-4 h-4" />
+                      Manage pharmaceutical companies and suppliers
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-3">
-                  <button 
+                  <Button 
                     onClick={() => exportToCSV(companies, 'companies')}
-                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2 font-medium"
+                    variant="outline"
+                    className="shadow-lg"
                   >
                     <BarChart3 className="w-4 h-4" />
                     Export
-                  </button>
-                  <button 
+                  </Button>
+                  <Button 
                     onClick={() => setShowAddCompanyModal(true)}
-                    className="px-4 py-2.5 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition-all flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/30"
+                    variant="primary"
+                    className="shadow-lg shadow-teal-500/30"
                   >
                     <Package className="w-4 h-4" />
                     Add Company
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -1717,37 +1814,45 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <Card className="overflow-hidden">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-gradient-to-r from-slate-50 via-teal-50 to-cyan-50 border-b-2 border-teal-200">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Address</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Medicines</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-teal-900 uppercase tracking-wider">Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-teal-900 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-teal-900 uppercase tracking-wider">Phone</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-teal-900 uppercase tracking-wider">Address</th>
+                          <th className="px-6 py-4 text-left text-xs font-bold text-teal-900 uppercase tracking-wider">Medicines</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {companies.map((company) => (
-                          <tr key={company.id} className="hover:bg-slate-50 transition">
+                        {getPaginatedData(companies).map((company) => (
+                          <tr key={company.id} className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 transition-all">
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{company.name}</div>
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                                  <Package className="w-5 h-5 text-teal-600" />
+                                </div>
+                                <span className="font-bold text-slate-900">{company.name}</span>
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{company.email}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{company.phone}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{company.address || 'N/A'}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{company.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">{company.phone}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
+                              <Badge variant="secondary">{company.address || 'N/A'}</Badge>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Badge variant="success">
+                                <Package className="w-3 h-3" />
                                 {company.medicineCount || 0} medicines
-                              </span>
+                              </Badge>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
-                  {pagination.totalPages > 1 && <Pagination pagination={pagination} onPageChange={handlePageChange} />}
+                  </Card>
+                  {companies.length > 0 && pagination.totalPages > 1 && <Pagination currentPage={pagination.pageNumber} totalPages={pagination.totalPages} onPageChange={handlePageChange} />}
                 </>
               )}
             </div>
@@ -1756,22 +1861,30 @@ const Dashboard = ({ user, onLogout }) => {
           {/* Reports Page */}
           {currentPage === 'reports' && (
             <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">Reports & Analytics</h2>
-                <p className="text-sm text-gray-500 mt-1">Generate and export various reports</p>
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/30">
+                  <BarChart3 className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Reports & Analytics</h2>
+                  <p className="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    Generate and export various reports
+                  </p>
+                </div>
               </div>
               
               {/* Report Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Sales Report</h3>
-                    <div className="p-3 bg-purple-50 rounded-xl">
+                    <h3 className="text-lg font-bold text-slate-900">Sales Report</h3>
+                    <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl">
                       <ShoppingCart className="w-6 h-6 text-purple-600" />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Export all sales transactions</p>
-                  <button
+                  <p className="text-sm text-slate-600 mb-4">Export all sales transactions</p>
+                  <Button
                     onClick={async () => {
                       try {
                         const allSales = await apiCall('/sales');
@@ -1780,21 +1893,22 @@ const Dashboard = ({ user, onLogout }) => {
                         alert('Failed to export sales report');
                       }
                     }}
-                    className="w-full bg-purple-500 text-white py-2.5 rounded-xl hover:bg-purple-600 transition font-medium"
+                    variant="primary"
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
                   >
                     Export Report
-                  </button>
-                </div>
+                  </Button>
+                </Card>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Inventory Report</h3>
-                    <div className="p-3 bg-emerald-50 rounded-xl">
+                    <h3 className="text-lg font-bold text-slate-900">Inventory Report</h3>
+                    <div className="p-3 bg-gradient-to-br from-emerald-100 to-green-100 rounded-xl">
                       <Package className="w-6 h-6 text-emerald-600" />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Export medicine inventory</p>
-                  <button
+                  <p className="text-sm text-slate-600 mb-4">Export medicine inventory</p>
+                  <Button
                     onClick={async () => {
                       try {
                         const allMedicines = await apiCall('/medicines');
@@ -1803,21 +1917,22 @@ const Dashboard = ({ user, onLogout }) => {
                         alert('Failed to export inventory report');
                       }
                     }}
-                    className="w-full bg-emerald-500 text-white py-2.5 rounded-xl hover:bg-emerald-600 transition font-medium"
+                    variant="success"
+                    className="w-full"
                   >
                     Export Report
-                  </button>
-                </div>
+                  </Button>
+                </Card>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Users Report</h3>
-                    <div className="p-3 bg-blue-50 rounded-xl">
+                    <h3 className="text-lg font-bold text-slate-900">Users Report</h3>
+                    <div className="p-3 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl">
                       <Users className="w-6 h-6 text-blue-600" />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Export user information</p>
-                  <button
+                  <p className="text-sm text-slate-600 mb-4">Export user information</p>
+                  <Button
                     onClick={async () => {
                       try {
                         const allUsers = await apiCall('/users');
@@ -1826,21 +1941,22 @@ const Dashboard = ({ user, onLogout }) => {
                         alert('Failed to export users report');
                       }
                     }}
-                    className="w-full bg-blue-500 text-white py-2.5 rounded-xl hover:bg-blue-600 transition font-medium"
+                    variant="primary"
+                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700"
                   >
                     Export Report
-                  </button>
-                </div>
+                  </Button>
+                </Card>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Low Stock Report</h3>
-                    <div className="p-3 bg-orange-50 rounded-xl">
+                    <h3 className="text-lg font-bold text-slate-900">Low Stock Report</h3>
+                    <div className="p-3 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl">
                       <AlertCircle className="w-6 h-6 text-orange-600" />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Export low stock medicines</p>
-                  <button
+                  <p className="text-sm text-slate-600 mb-4">Export low stock medicines</p>
+                  <Button
                     onClick={async () => {
                       try {
                         const lowStock = await apiCall('/medicines/low-stock?threshold=20');
@@ -1849,21 +1965,22 @@ const Dashboard = ({ user, onLogout }) => {
                         alert('Failed to export low stock report');
                       }
                     }}
-                    className="w-full bg-orange-500 text-white py-2.5 rounded-xl hover:bg-orange-600 transition font-medium"
+                    variant="warning"
+                    className="w-full"
                   >
                     Export Report
-                  </button>
-                </div>
+                  </Button>
+                </Card>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Expired Medicines</h3>
-                    <div className="p-3 bg-red-50 rounded-xl">
+                    <h3 className="text-lg font-bold text-slate-900">Expired Medicines</h3>
+                    <div className="p-3 bg-gradient-to-br from-red-100 to-rose-100 rounded-xl">
                       <AlertCircle className="w-6 h-6 text-red-600" />
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Export expired medicines</p>
-                  <button
+                  <p className="text-sm text-slate-600 mb-4">Export expired medicines</p>
+                  <Button
                     onClick={async () => {
                       try {
                         const expired = await apiCall('/medicines/expired');
@@ -1872,35 +1989,43 @@ const Dashboard = ({ user, onLogout }) => {
                         alert('Failed to export expired medicines report');
                       }
                     }}
-                    className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+                    variant="danger"
+                    className="w-full"
                   >
                     Export Expired CSV
-                  </button>
-                </div>
+                  </Button>
+                </Card>
 
-                <div className="bg-white rounded-xl shadow-md p-6">
+                <Card className="hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Revenue Report</h3>
-                    <BarChart3 className="w-8 h-8 text-indigo-500" />
+                    <h3 className="text-lg font-bold text-slate-900">Revenue Report</h3>
+                    <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl">
+                      <BarChart3 className="w-6 h-6 text-indigo-600" />
+                    </div>
                   </div>
-                  <p className="text-gray-600 mb-4">View revenue statistics</p>
-                  <button
+                  <p className="text-slate-600 mb-4">View revenue statistics</p>
+                  <Button
                     onClick={() => {
                       alert(`Total Revenue: RWF ${Number(stats.totalRevenue || 0).toFixed(2)}\nToday's Revenue: RWF ${Number(stats.todayRevenue || 0).toFixed(2)}`);
                     }}
-                    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+                    variant="primary"
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
                   >
                     View Revenue Stats
-                  </button>
-                </div>
+                  </Button>
+                </Card>
               </div>
 
               {/* Print All Reports */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Generate Complete Report</h3>
-                <p className="text-gray-600 mb-4">Generate a comprehensive report with all data</p>
-                <button
-                  onClick={async () => {
+              <Card className="p-6">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <BarChart3 className="w-6 h-6 text-orange-600" />
+                    Generate Complete Report
+                  </h3>
+                  <p className="text-slate-600 mb-4">Generate a comprehensive report with all data</p>
+                  <Button
+                    onClick={async () => {
                     try {
                       const [allSales, allMedicines, allUsers] = await Promise.all([
                         apiCall('/sales'),
@@ -1990,12 +2115,279 @@ const Dashboard = ({ user, onLogout }) => {
                       alert('Failed to generate complete report');
                     }
                   }}
-                  className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-green-700 transition flex items-center justify-center gap-2"
+                  variant="primary"
+                  className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700"
+                  size="lg"
                 >
                   <BarChart3 className="w-5 h-5" />
                   Generate & Print Complete Report
-                </button>
+                </Button>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* Analytics Page */}
+          {currentPage === 'analytics' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Advanced Analytics</h2>
+                <p className="text-sm text-slate-500 mt-1">Data-driven insights for better decisions</p>
               </div>
+
+              {/* Advanced Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <StatCard
+                  title="Total Revenue"
+                  value={`RWF ${Number(stats.totalRevenue || 0).toLocaleString()}`}
+                  icon={DollarSign}
+                  color="green"
+                  trend={12.5}
+                  description="vs last month"
+                />
+                <StatCard
+                  title="Total Sales"
+                  value={stats.totalSales || 0}
+                  icon={ShoppingCart}
+                  color="blue"
+                  trend={8.2}
+                  description="vs last month"
+                />
+                <StatCard
+                  title="Active Users"
+                  value={stats.active || 0}
+                  icon={Users}
+                  color="purple"
+                  trend={-2.1}
+                  description="vs last month"
+                />
+                <StatCard
+                  title="Products"
+                  value={stats.totalMedicines || 0}
+                  icon={Package}
+                  color="orange"
+                  trend={5.3}
+                  description="new this month"
+                />
+              </div>
+
+              {/* Charts Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <SimpleBarChart
+                  title="Sales by Category"
+                  data={[
+                    { label: 'Antibiotics', value: 145 },
+                    { label: 'Pain Relief', value: 230 },
+                    { label: 'Vitamins', value: 178 },
+                    { label: 'First Aid', value: 95 },
+                    { label: 'Supplements', value: 167 },
+                    { label: 'Others', value: 89 }
+                  ]}
+                  height={300}
+                />
+                
+                <SimplePieChart
+                  title="Revenue Distribution"
+                  data={[
+                    { label: 'Direct Sales', value: 45000 },
+                    { label: 'Online Orders', value: 32000 },
+                    { label: 'Bulk Orders', value: 18000 },
+                    { label: 'Others', value: 9000 }
+                  ]}
+                  size={250}
+                />
+              </div>
+
+              {/* Top Performing Products */}
+              <Card>
+                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                  Top Performing Products
+                </h3>
+                <div className="space-y-3">
+                  {medicines.slice(0, 5).map((medicine, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-cyan-50 rounded-xl hover:shadow-md transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold shadow-lg">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-900">{medicine.name}</p>
+                          <p className="text-xs text-slate-500">{medicine.category}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-emerald-600">RWF {Number(medicine.sellingPrice || 0).toFixed(2)}</p>
+                        <Badge variant="success" size="sm">{medicine.quantity || 0} in stock</Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Recent Activity */}
+              <Card>
+                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-blue-600" />
+                  Recent Activity
+                </h3>
+                <div className="space-y-3">
+                  {sales.slice(0, 5).map((sale, index) => (
+                    <div key={index} className="flex items-start gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <ShoppingCart className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-slate-900">{sale.customerName || 'Walk-in Customer'}</p>
+                        <p className="text-xs text-slate-500">Purchased {sale.medicine?.name || 'Product'}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-emerald-600">RWF {Number(sale.totalPrice || 0).toFixed(2)}</p>
+                        <p className="text-xs text-slate-500">{new Date(sale.saleDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* Profile Page */}
+          {currentPage === 'profile' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">My Profile</h2>
+                <p className="text-sm text-slate-500 mt-1">Manage your account settings</p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Profile Card */}
+                <Card className="lg:col-span-1">
+                  <div className="text-center">
+                    <div className="inline-block relative mb-4">
+                      <img 
+                        src={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=0ea5e9&color=fff&size=128`}
+                        alt={user.firstName}
+                        className="w-32 h-32 rounded-full shadow-2xl border-4 border-white"
+                      />
+                      <div className="absolute bottom-0 right-0 w-8 h-8 bg-emerald-500 rounded-full border-4 border-white flex items-center justify-center">
+                        <CheckCircle className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900">{user.firstName} {user.lastName}</h3>
+                    <Badge variant="primary" className="mt-2">{user.role}</Badge>
+                    <p className="text-sm text-slate-500 mt-4">{user.email}</p>
+                  </div>
+                  
+                  <div className="mt-6 space-y-3">
+                    <div className="flex items-center justify-between py-3 border-t border-slate-100">
+                      <span className="text-sm font-medium text-slate-600">Phone</span>
+                      <span className="text-sm text-slate-900">{user.phone}</span>
+                    </div>
+                    <div className="flex items-center justify-between py-3 border-t border-slate-100">
+                      <span className="text-sm font-medium text-slate-600">Status</span>
+                      <Badge variant={user.active ? "success" : "danger"}>{user.active ? 'Active' : 'Inactive'}</Badge>
+                    </div>
+                    <div className="flex items-center justify-between py-3 border-t border-slate-100">
+                      <span className="text-sm font-medium text-slate-600">Member Since</span>
+                      <span className="text-sm text-slate-900">Jan 2024</span>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Settings Card */}
+                <Card className="lg:col-span-2">
+                  <h3 className="text-lg font-bold text-slate-900 mb-6">Account Settings</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">First Name</label>
+                      <input
+                        type="text"
+                        defaultValue={user.firstName}
+                        className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Last Name</label>
+                      <input
+                        type="text"
+                        defaultValue={user.lastName}
+                        className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        defaultValue={user.email}
+                        className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        defaultValue={user.phone}
+                        className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      />
+                    </div>
+                    
+                    <div className="flex gap-3 pt-4">
+                      <Button variant="primary" className="flex-1">
+                        <CheckCircle className="w-4 h-4" />
+                        Save Changes
+                      </Button>
+                      <Button variant="outline">
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Security Settings */}
+              <Card>
+                <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-cyan-600" />
+                  Security Settings
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Current Password</label>
+                    <input
+                      type="password"
+                      className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">New Password</label>
+                    <input
+                      type="password"
+                      className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Confirm New Password</label>
+                    <input
+                      type="password"
+                      className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-200 focus:outline-none transition-all"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  
+                  <Button variant="primary">
+                    <Shield className="w-4 h-4" />
+                    Update Password
+                  </Button>
+                </div>
+              </Card>
             </div>
           )}
         </main>
@@ -2953,71 +3345,6 @@ const AddCompanyModal = ({ onClose, onSuccess }) => {
   );
 };
 
-// Pagination Component
-const Pagination = ({ pagination, onPageChange}) => {
-  const { pageNumber, totalPages } = pagination;
-  
-  if (totalPages <= 1) return null;
-
-  const pages = [];
-  for (let i = 0; i < totalPages; i++) {
-    if (
-      i === 0 ||
-      i === totalPages - 1 ||
-      (i >= pageNumber - 1 && i <= pageNumber + 1)
-    ) {
-      pages.push(i);
-    } else if (pages[pages.length - 1] !== '...') {
-      pages.push('...');
-    }
-  }
-
-  return (
-    <div className="flex items-center justify-between bg-white px-4 py-3 rounded-lg shadow-md">
-      <div className="text-sm text-gray-700">
-        Showing page <span className="font-semibold">{pageNumber + 1}</span> of{' '}
-        <span className="font-semibold">{totalPages}</span>
-      </div>
-      
-      <div className="flex gap-2">
-        <button
-          onClick={() => onPageChange(pageNumber - 1)}
-          disabled={pageNumber === 0}
-          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        
-        {pages.map((page, index) => (
-          page === '...' ? (
-            <span key={index} className="px-3 py-2">...</span>
-          ) : (
-            <button
-              key={index}
-              onClick={() => onPageChange(page)}
-              className={`px-4 py-2 rounded-lg font-medium ${
-                page === pageNumber
-                  ? 'bg-blue-600 text-white'
-                  : 'border border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              {page + 1}
-            </button>
-          )
-        ))}
-        
-        <button
-          onClick={() => onPageChange(pageNumber + 1)}
-          disabled={pageNumber === totalPages - 1}
-          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // Main App Component
 // Public Product Catalog Component
 const PublicCatalog = ({ onSwitchToLogin }) => {
@@ -3068,7 +3395,7 @@ const PublicCatalog = ({ onSwitchToLogin }) => {
               onClick={onSwitchToLogin}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
-              Staff Login
+              Login
             </button>
           </div>
         </div>

@@ -1,8 +1,10 @@
 package com.example.pharmacymanagementsystem.service;
 
 import com.example.pharmacymanagementsystem.dto.auth.*;
+import com.example.pharmacymanagementsystem.model.Customer;
 import com.example.pharmacymanagementsystem.model.Location;
 import com.example.pharmacymanagementsystem.model.User;
+import com.example.pharmacymanagementsystem.repository.CustomerRepository;
 import com.example.pharmacymanagementsystem.repository.LocationRepository;
 import com.example.pharmacymanagementsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final LocationRepository locationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -208,5 +211,71 @@ public class AuthService {
             throw new RuntimeException("User not found");
         }
         otpService.generateAndSendOTP(email);
+    }
+
+    @Transactional
+    public AuthResponse customerSignup(CustomerSignupRequest request) {
+        // Validate email uniqueness
+        if (customerRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        // Create customer
+        Customer customer = Customer.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .address(request.getAddress())
+                .build();
+
+        customer = customerRepository.save(customer);
+        log.info("Customer created: {}", customer.getEmail());
+
+        // Generate JWT token for customer
+        String token = jwtService.generateToken(
+                customer.getEmail(),
+                "CUSTOMER",
+                customer.getId()
+        );
+
+        return AuthResponse.builder()
+                .token(token)
+                .userId(customer.getId())
+                .email(customer.getEmail())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .role("CUSTOMER")
+                .requiresOTP(false)
+                .message("Registration successful!")
+                .build();
+    }
+
+    public AuthResponse customerLogin(LoginRequest request) {
+        Customer customer = customerRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), customer.getPassword())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        // Generate JWT token
+        String token = jwtService.generateToken(
+                customer.getEmail(),
+                "CUSTOMER",
+                customer.getId()
+        );
+
+        return AuthResponse.builder()
+                .token(token)
+                .userId(customer.getId())
+                .email(customer.getEmail())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .role("CUSTOMER")
+                .requiresOTP(false)
+                .message("Login successful!")
+                .build();
     }
 }

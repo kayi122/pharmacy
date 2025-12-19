@@ -43,6 +43,10 @@ public class Customer {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
+    private String password;
+
+    @Column(nullable = false)
     private String phone;
 
     private String address;

@@ -46,4 +46,14 @@ public class AuthController {
     public ResponseEntity<AuthResponse> resetPassword(@RequestBody PasswordResetRequest request) {
         return ResponseEntity.ok(authService.resetPassword(request));
     }
+
+    @PostMapping("/customer/signup")
+    public ResponseEntity<AuthResponse> customerSignup(@Valid @RequestBody CustomerSignupRequest request) {
+        return ResponseEntity.ok(authService.customerSignup(request));
+    }
+
+    @PostMapping("/customer/login")
+    public ResponseEntity<AuthResponse> customerLogin(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.customerLogin(request));
+    }
 }
