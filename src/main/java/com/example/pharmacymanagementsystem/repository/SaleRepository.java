@@ -96,12 +96,12 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Query("SELECT COALESCE(SUM(s.quantity), 0) FROM Sale s WHERE s.medicine.id = :medicineId")
     Long getTotalQuantitySoldByMedicine(@Param("medicineId") Long medicineId);
 
-    // FIXED: Find today's sales using CAST
-    @Query("SELECT s FROM Sale s WHERE CAST(s.saleDate AS DATE) = CURRENT_DATE ORDER BY s.saleDate DESC")
+    // FIXED: Find today's sales using date functions compatible with Hibernate 5.6
+    @Query("SELECT s FROM Sale s WHERE DATE(s.saleDate) = CURRENT_DATE ORDER BY s.saleDate DESC")
     List<Sale> findTodaySales();
 
-    // FIXED: Get today's revenue using CAST
-    @Query("SELECT COALESCE(SUM(s.totalPrice), 0) FROM Sale s WHERE CAST(s.saleDate AS DATE) = CURRENT_DATE")
+    // FIXED: Get today's revenue using date functions compatible with Hibernate 5.6
+    @Query("SELECT COALESCE(SUM(s.totalPrice), 0) FROM Sale s WHERE DATE(s.saleDate) = CURRENT_DATE")
     Double getTodayRevenue();
 
     // Find this week's sales
@@ -159,8 +159,9 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     // Paginated sales by date range
     Page<Sale> findBySaleDateBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
     
-    // Paginated sales with details
-    @Query("SELECT s FROM Sale s LEFT JOIN FETCH s.medicine LEFT JOIN FETCH s.user")
+    // Paginated sales with details (fixed for count query compatibility)
+    @Query(value = "SELECT s FROM Sale s LEFT JOIN FETCH s.medicine LEFT JOIN FETCH s.user",
+           countQuery = "SELECT COUNT(s) FROM Sale s")
     Page<Sale> findAllWithDetails(Pageable pageable);
     
     // Global search in sales (for search bar)

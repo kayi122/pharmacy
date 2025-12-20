@@ -23,6 +23,8 @@ public class SaleDTO {
     private LocalDateTime saleDate;
     private String customerName;
     private String customerPhone;
+    private String paymentMethod;
+    private String deliveryMethod;
 
     // Medicine information
     private Long medicineId;
@@ -47,6 +49,8 @@ public class SaleDTO {
         this.saleDate = sale.getSaleDate();
         this.customerName = sale.getCustomerName();
         this.customerPhone = sale.getCustomerPhone();
+        this.paymentMethod = sale.getPaymentMethod() != null ? sale.getPaymentMethod().toString() : null;
+        this.deliveryMethod = sale.getDeliveryMethod();
 
         // Medicine info
         if (sale.getMedicine() != null) {

@@ -2,6 +2,7 @@ package com.example.pharmacymanagementsystem.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 @Entity
@@ -99,7 +100,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
     }
 
     @Override

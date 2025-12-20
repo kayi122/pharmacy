@@ -2,7 +2,7 @@ package com.example.pharmacymanagementsystem.controller;
 
 import com.example.pharmacymanagementsystem.dto.auth.*;
 import com.example.pharmacymanagementsystem.service.AuthService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +39,18 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         authService.requestPasswordReset(email);
-        return ResponseEntity.ok("Password reset OTP sent");
+        return ResponseEntity.ok("Password reset link sent to your email");
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<AuthResponse> resetPassword(@RequestBody PasswordResetRequest request) {
+    public ResponseEntity<AuthResponse> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
         return ResponseEntity.ok(authService.resetPassword(request));
+    }
+
+    @GetMapping("/validate-reset-token")
+    public ResponseEntity<String> validateResetToken(@RequestParam String token) {
+        authService.validateResetToken(token);
+        return ResponseEntity.ok("Token is valid");
     }
 
     @PostMapping("/customer/signup")

@@ -1,7 +1,12 @@
 package com.example.pharmacymanagementsystem.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,10 +34,19 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
+    @GetMapping("/paginated")
+    public ResponseEntity<Map<String, Object>> getCompaniesPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        log.info("GET request to fetch companies page {} with size {}", page, size);
+        return ResponseEntity.ok(companyService.getCompaniesPaginated(page, size, search));
+    }
+
     @GetMapping
     public ResponseEntity<List<CompanyDTO>> getAllCompanies() {
         log.info("GET request to fetch all companies");
-        List<CompanyDTO> companies = companyService.getAllCompanies();
+        List<CompanyDTO> companies = companyService.getAllCompaniesAsList();
         return ResponseEntity.ok(companies);
     }
 

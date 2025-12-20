@@ -168,9 +168,7 @@ public class SaleService {
             throw new BadRequestException("Medicine information is required");
         }
 
-        if (sale.getUser() == null || sale.getUser().getId() == null) {
-            throw new BadRequestException("User information is required");
-        }
+
 
         // Validate medicine
         Medicine medicine = medicineRepository.findById(sale.getMedicine().getId())
@@ -193,9 +191,12 @@ public class SaleService {
             throw new BadRequestException("Sale quantity must be greater than zero");
         }
 
-        // Validate user
-        User user = userRepository.findById(sale.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + sale.getUser().getId()));
+        // Validate user if provided
+        if (sale.getUser() != null && sale.getUser().getId() != null) {
+            User user = userRepository.findById(sale.getUser().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + sale.getUser().getId()));
+            sale.setUser(user);
+        }
 
         // Set sale date if not provided
         if (sale.getSaleDate() == null) {
@@ -208,7 +209,6 @@ public class SaleService {
         }
 
         sale.setMedicine(medicine);
-        sale.setUser(user);
 
         // Update medicine quantity
         medicine.setQuantity(medicine.getQuantity() - sale.getQuantity());

@@ -1,6 +1,6 @@
 package com.example.pharmacymanagementsystem.dto.auth;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -8,12 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 public class PasswordResetRequest {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String email;
-
-    @NotBlank(message = "OTP is required")
-    private String otp;
+    @NotBlank(message = "Token is required")
+    private String token;
 
     @NotBlank(message = "New password is required")
     @Size(min = 8, message = "Password must be at least 8 characters")

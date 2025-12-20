@@ -1,6 +1,7 @@
 package com.example.pharmacymanagementsystem.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -23,11 +24,32 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public List<CompanyDTO> getAllCompanies() {
-        log.info("Fetching all companies");
+    public List<CompanyDTO> getAllCompaniesAsList() {
+        log.info("Fetching all companies as list");
         return companyRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> getCompaniesPaginated(int page, int size, String search) {
+        List<Company> allCompanies;
+        if (search != null && !search.isEmpty()) {
+            allCompanies = companyRepository.searchByNameOrCountry(search);
+        } else {
+            allCompanies = companyRepository.findAll();
+        }
+        
+        int start = page * size;
+        int end = Math.min(start + size, allCompanies.size());
+        List<Company> pageCompanies = allCompanies.subList(start, end);
+        
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("content", pageCompanies.stream().map(this::convertToDTO).collect(Collectors.toList()));
+        response.put("currentPage", page);
+        response.put("totalItems", allCompanies.size());
+        response.put("totalPages", (int) Math.ceil((double) allCompanies.size() / size));
+        
+        return response;
     }
 
     public List<CompanyDTO> getAllCompaniesWithMedicines() {
@@ -140,12 +162,10 @@ public class CompanyService {
     public CompanyDTO createCompany(Company company) {
         log.info("Creating new company with name: {}", company.getName());
 
-        // Check for duplicate email
         if (companyRepository.existsByEmail(company.getEmail())) {
             throw new DuplicateResourceException("Company with email " + company.getEmail() + " already exists");
         }
 
-        // Check for duplicate registration number
         if (companyRepository.existsByRegistrationNumber(company.getRegistrationNumber())) {
             throw new DuplicateResourceException(
                     "Company with registration number " + company.getRegistrationNumber() + " already exists");
@@ -163,13 +183,11 @@ public class CompanyService {
         Company existingCompany = companyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + id));
 
-        // Check for duplicate email (excluding current company)
         if (!existingCompany.getEmail().equals(updatedCompany.getEmail())
                 && companyRepository.existsByEmail(updatedCompany.getEmail())) {
             throw new DuplicateResourceException("Company with email " + updatedCompany.getEmail() + " already exists");
         }
 
-        // Check for duplicate registration number (excluding current company)
         if (!existingCompany.getRegistrationNumber().equals(updatedCompany.getRegistrationNumber())
                 && companyRepository.existsByRegistrationNumber(updatedCompany.getRegistrationNumber())) {
             throw new DuplicateResourceException(

@@ -32,7 +32,8 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
     List<Agent> findByLastNameContainingIgnoreCase(String lastName);
 
     // Find agents by company name
-    List<Agent> findByCompanyNameContainingIgnoreCase(String companyName);
+    @Query("SELECT a FROM Agent a WHERE LOWER(a.company.name) LIKE LOWER(CONCAT('%', :companyName, '%'))")
+    List<Agent> findByCompanyNameContainingIgnoreCase(@Param("companyName") String companyName);
 
     // Search agents by name (first or last)
     @Query("SELECT a FROM Agent a WHERE LOWER(a.firstName) LIKE LOWER(CONCAT('%', :name, '%')) "
@@ -54,18 +55,21 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
     Long countByLocationId(Long locationId);
 
     // Count agents by company name
-    Long countByCompanyName(String companyName);
+    @Query("SELECT COUNT(a) FROM Agent a WHERE a.company.name = :companyName")
+    Long countByCompanyName(@Param("companyName") String companyName);
 
     // Find all agents with their relationships
     @Query("SELECT DISTINCT a FROM Agent a "
             + "LEFT JOIN FETCH a.medicines "
-            + "LEFT JOIN FETCH a.location")
+            + "LEFT JOIN FETCH a.location "
+            + "LEFT JOIN FETCH a.company")
     List<Agent> findAllWithRelations();
 
     // Find agent by ID with relationships
     @Query("SELECT a FROM Agent a "
             + "LEFT JOIN FETCH a.medicines "
             + "LEFT JOIN FETCH a.location "
+            + "LEFT JOIN FETCH a.company "
             + "WHERE a.id = :agentId")
     Optional<Agent> findByIdWithRelations(@Param("agentId") Long agentId);
 
@@ -76,6 +80,7 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
     @Query("SELECT a FROM Agent a "
             + "LEFT JOIN FETCH a.medicines "
             + "LEFT JOIN FETCH a.location "
+            + "LEFT JOIN FETCH a.company "
             + "WHERE a.location.id = :locationId")
     List<Agent> findByLocationIdWithDetails(@Param("locationId") Long locationId);
 

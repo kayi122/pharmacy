@@ -1,5 +1,6 @@
 package com.example.pharmacymanagementsystem.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -244,7 +245,9 @@ public class UserController {
     public ResponseEntity<Object> getUserStats() {
         log.info("GET request to get user statistics");
         long totalUsers = userService.countAllUsers();
-        return ResponseEntity.ok(Map.of("totalUsers", totalUsers));
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalUsers", totalUsers);
+        return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/debug/{email}")
@@ -252,14 +255,16 @@ public class UserController {
         log.info("DEBUG request for user: {}", email);
         try {
             UserDTO user = userService.getUserByEmail(email);
-            return ResponseEntity.ok(Map.of(
-                "email", user.getEmail(),
-                "active", user.getActive(),
-                "emailVerified", user.getEmailVerified(),
-                "passwordStartsWith", "[HIDDEN]"
-            ));
+            Map<String, Object> debugInfo = new HashMap<>();
+            debugInfo.put("email", user.getEmail());
+            debugInfo.put("active", user.getActive());
+            debugInfo.put("emailVerified", user.getEmailVerified());
+            debugInfo.put("passwordStartsWith", "[HIDDEN]");
+            return ResponseEntity.ok(debugInfo);
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of("error", e.getMessage()));
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("error", e.getMessage());
+            return ResponseEntity.ok(errorMap);
         }
     }
 
@@ -267,6 +272,8 @@ public class UserController {
     public ResponseEntity<Object> migratePasswords() {
         log.info("POST request to migrate plain text passwords");
         userService.hashPlainTextPasswords();
-        return ResponseEntity.ok(Map.of("message", "Password migration completed"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Password migration completed");
+        return ResponseEntity.ok(response);
     }
 }

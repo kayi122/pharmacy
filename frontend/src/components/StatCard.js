@@ -20,15 +20,6 @@ const StatCard = ({
     teal: 'from-teal-500 to-cyan-600',
   };
   
-  const bgColors = {
-    blue: 'bg-blue-50',
-    green: 'bg-emerald-50',
-    purple: 'bg-purple-50',
-    orange: 'bg-orange-50',
-    pink: 'bg-pink-50',
-    teal: 'bg-teal-50',
-  };
-  
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-xl hover:border-cyan-200 hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-start justify-between mb-4">

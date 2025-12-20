@@ -249,8 +249,11 @@ const CustomerApp = ({ onStaffLogin }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('customerToken');
+      const userId = user?.id || null;
+      
       const sales = cart.map(item => ({
         medicine: { id: item.id },
+        user: userId ? { id: userId } : null,
         quantity: item.quantity,
         totalPrice: item.sellingPrice * item.quantity,
         customerName: user?.name || customerInfo.name,
@@ -346,7 +349,10 @@ const CustomerApp = ({ onStaffLogin }) => {
   };
 
   const filteredMedicines = medicines.filter(m => {
-    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = !searchTerm || 
+      m.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.category?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'ALL' || m.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -1360,9 +1366,9 @@ const CustomerApp = ({ onStaffLogin }) => {
                 Quick Links
               </h4>
               <ul className="space-y-3">
-                <li><a href="#home" className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Home</a></li>
-                <li><a href="#medicines" className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Shop Medicines</a></li>
-                <li><a href="#contact" className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Contact Us</a></li>
+                <li><button onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Home</button></li>
+                <li><button onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Shop Medicines</button></li>
+                <li><button onClick={() => window.scrollTo(0, document.body.scrollHeight)} className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Contact Us</button></li>
                 <li><button onClick={onStaffLogin} className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">Staff Login</button></li>
               </ul>
             </div>
@@ -1399,8 +1405,8 @@ const CustomerApp = ({ onStaffLogin }) => {
                 © {new Date().getFullYear()} Wellness Pharmacy. All rights reserved.
               </p>
               <div className="flex items-center gap-6 text-sm">
-                <a href="#" className="text-slate-400 hover:text-emerald-400 transition-colors">Privacy Policy</a>
-                <a href="#" className="text-slate-400 hover:text-emerald-400 transition-colors">Terms of Service</a>
+                <button onClick={() => alert('Privacy Policy')} className="text-slate-400 hover:text-emerald-400 transition-colors">Privacy Policy</button>
+                <button onClick={() => alert('Terms of Service')} className="text-slate-400 hover:text-emerald-400 transition-colors">Terms of Service</button>
                 <span className="text-slate-600">•</span>
                 <span className="text-slate-400">Licensed Pharmacy 🇷🇼</span>
               </div>

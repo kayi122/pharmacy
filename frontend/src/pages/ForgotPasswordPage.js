@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Mail, CheckCircle, Lock } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
-const ForgotPassword = ({ onClose, onSuccess }) => {
+const ForgotPasswordPage = ({ onReset, onSwitchToLogin }) => {
+  const API_BASE_URL = 'http://localhost:8080/api';
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,7 +24,7 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
         const errorText = await response.text();
         setError(errorText || 'Failed to send reset link. Please check your email.');
       }
-    } catch (error) {
+    } catch (err) {
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -47,7 +46,8 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
@@ -63,7 +63,7 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
                 The link will expire in 1 hour. If you don't see the email, check your spam folder.
               </p>
               <button
-                onClick={onClose}
+                onClick={onSwitchToLogin}
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition"
               >
                 Back to Login
@@ -82,24 +82,32 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your.email@example.com"
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    placeholder="your.email@example.com"
                     required
                   />
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {loading ? 'Sending...' : 'Send Reset Link'}
+                {loading ? (
+                  <>
+                    <Loader className="w-5 h-5 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  'Send Reset Link'
+                )}
               </button>
             </form>
           )}
 
           <div className="text-center text-sm text-gray-600">
-            <button onClick={onClose} className="text-orange-600 hover:text-orange-700 font-semibold">
+            <button onClick={onSwitchToLogin} className="text-orange-600 hover:text-orange-700 font-semibold">
               Back to Login
             </button>
           </div>
@@ -109,4 +117,4 @@ const ForgotPassword = ({ onClose, onSuccess }) => {
   );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordPage;

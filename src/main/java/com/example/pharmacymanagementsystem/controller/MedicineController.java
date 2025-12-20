@@ -324,12 +324,12 @@ public class MedicineController {
         long expiredMedicines = medicineService.countExpiredMedicines();
         long lowStockMedicines = medicineService.countLowStockMedicines(10);
         Double totalInventoryValue = medicineService.getTotalInventoryValue();
-        return ResponseEntity.ok(Map.of(
-            "totalMedicines", totalMedicines,
-            "expiredMedicines", expiredMedicines,
-            "lowStockMedicines", lowStockMedicines,
-            "totalInventoryValue", totalInventoryValue != null ? totalInventoryValue : 0.0
-        ));
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalMedicines", totalMedicines);
+        stats.put("expiredMedicines", expiredMedicines);
+        stats.put("lowStockMedicines", lowStockMedicines);
+        stats.put("totalInventoryValue", totalInventoryValue != null ? totalInventoryValue : 0.0);
+        return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/categories")

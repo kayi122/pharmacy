@@ -2,6 +2,7 @@ package com.example.pharmacymanagementsystem.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.pharmacymanagementsystem.dto.AgentDTO;
 import com.example.pharmacymanagementsystem.exception.ResourceNotFoundException;
 import com.example.pharmacymanagementsystem.model.Agent;
+import com.example.pharmacymanagementsystem.model.Company;
 import com.example.pharmacymanagementsystem.model.Location;
 import com.example.pharmacymanagementsystem.model.Medicine;
 import com.example.pharmacymanagementsystem.repository.AgentRepository;
+import com.example.pharmacymanagementsystem.repository.CompanyRepository;
 import com.example.pharmacymanagementsystem.repository.LocationRepository;
 import com.example.pharmacymanagementsystem.repository.MedicineRepository;
 
@@ -29,12 +32,34 @@ public class AgentService {
     private final AgentRepository agentRepository;
     private final LocationRepository locationRepository;
     private final MedicineRepository medicineRepository;
+    private final CompanyRepository companyRepository;
 
     public List<AgentDTO> getAllAgents() {
         log.info("Fetching all agents");
         return agentRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> getAgentsPaginated(int page, int size, String search) {
+        List<Agent> allAgents;
+        if (search != null && !search.isEmpty()) {
+            allAgents = agentRepository.searchByName(search);
+        } else {
+            allAgents = agentRepository.findAll();
+        }
+        
+        int start = page * size;
+        int end = Math.min(start + size, allAgents.size());
+        List<Agent> pageAgents = allAgents.subList(start, end);
+        
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("content", pageAgents.stream().map(this::convertToDTO).collect(Collectors.toList()));
+        response.put("currentPage", page);
+        response.put("totalItems", allAgents.size());
+        response.put("totalPages", (int) Math.ceil((double) allAgents.size() / size));
+        
+        return response;
     }
 
     public List<AgentDTO> getAllAgentsWithRelations() {
@@ -139,6 +164,12 @@ public class AgentService {
     public AgentDTO createAgent(Agent agent) {
         log.info("Creating new agent with email: {}", agent.getEmail());
 
+        if (agent.getCompany() != null && agent.getCompany().getId() != null) {
+            Company company = companyRepository.findById(agent.getCompany().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+            agent.setCompany(company);
+        }
+
         if (agent.getLocation() != null && agent.getLocation().getId() != null) {
             Location location = locationRepository.findById(agent.getLocation().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Location not found"));
@@ -171,7 +202,12 @@ public class AgentService {
         existingAgent.setLastName(updatedAgent.getLastName());
         existingAgent.setEmail(updatedAgent.getEmail());
         existingAgent.setPhone(updatedAgent.getPhone());
-        existingAgent.setCompanyName(updatedAgent.getCompanyName());
+        
+        if (updatedAgent.getCompany() != null && updatedAgent.getCompany().getId() != null) {
+            Company company = companyRepository.findById(updatedAgent.getCompany().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+            existingAgent.setCompany(company);
+        }
 
         if (updatedAgent.getLocation() != null && updatedAgent.getLocation().getId() != null) {
             Location location = locationRepository.findById(updatedAgent.getLocation().getId())

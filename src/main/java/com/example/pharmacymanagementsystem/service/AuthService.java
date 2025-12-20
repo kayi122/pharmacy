@@ -3,9 +3,11 @@ package com.example.pharmacymanagementsystem.service;
 import com.example.pharmacymanagementsystem.dto.auth.*;
 import com.example.pharmacymanagementsystem.model.Customer;
 import com.example.pharmacymanagementsystem.model.Location;
+import com.example.pharmacymanagementsystem.model.PasswordResetToken;
 import com.example.pharmacymanagementsystem.model.User;
 import com.example.pharmacymanagementsystem.repository.CustomerRepository;
 import com.example.pharmacymanagementsystem.repository.LocationRepository;
+import com.example.pharmacymanagementsystem.repository.PasswordResetTokenRepository;
 import com.example.pharmacymanagementsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final LocationRepository locationRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final OTPService otpService;
@@ -176,30 +181,84 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
     public void requestPasswordReset(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Check if user or customer exists
+        boolean isUser = userRepository.existsByEmail(email);
+        boolean isCustomer = customerRepository.existsByEmail(email);
 
-        // Generate and send OTP
-        String otp = otpService.generateAndSendOTP(email);
-        emailService.sendPasswordResetEmail(email, otp);
+        if (!isUser && !isCustomer) {
+            throw new RuntimeException("Email not found");
+        }
 
-        log.info("Password reset requested for: {}", email);
+        // Generate unique token
+        String token = UUID.randomUUID().toString();
+        String userType = isUser ? "USER" : "CUSTOMER";
+
+        // Delete any existing tokens for this email
+        passwordResetTokenRepository.deleteByEmail(email);
+
+        // Create and save token
+        PasswordResetToken resetToken = PasswordResetToken.builder()
+                .token(token)
+                .email(email)
+                .userType(userType)
+                .used(false)
+                .build();
+        passwordResetTokenRepository.save(resetToken);
+
+        // Send reset link via email
+        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+        emailService.sendPasswordResetLink(email, resetLink);
+
+        log.info("Password reset link sent to: {}", email);
+    }
+
+    public void validateResetToken(String token) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid reset token"));
+
+        if (resetToken.isExpired()) {
+            throw new RuntimeException("Reset token has expired");
+        }
+
+        if (resetToken.getUsed()) {
+            throw new RuntimeException("Reset token has already been used");
+        }
     }
 
     @Transactional
     public AuthResponse resetPassword(PasswordResetRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Find and validate token
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new RuntimeException("Invalid reset token"));
 
-        // Verify OTP
-        otpService.verifyOTP(request.getEmail(), request.getOtp());
+        if (resetToken.isExpired()) {
+            throw new RuntimeException("Reset token has expired");
+        }
 
-        // Update password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
+        if (resetToken.getUsed()) {
+            throw new RuntimeException("Reset token has already been used");
+        }
 
-        log.info("Password reset successful for: {}", request.getEmail());
+        // Update password based on user type
+        if ("USER".equals(resetToken.getUserType())) {
+            User user = userRepository.findByEmail(resetToken.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+        } else {
+            Customer customer = customerRepository.findByEmail(resetToken.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Customer not found"));
+            customer.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            customerRepository.save(customer);
+        }
+
+        // Mark token as used
+        resetToken.setUsed(true);
+        passwordResetTokenRepository.save(resetToken);
+
+        log.info("Password reset successful for: {}", resetToken.getEmail());
 
         return AuthResponse.builder()
                 .message("Password reset successful! Please login with your new password.")

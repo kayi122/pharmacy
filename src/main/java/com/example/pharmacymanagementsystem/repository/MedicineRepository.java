@@ -73,18 +73,14 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     @Query("SELECT m FROM Medicine m LEFT JOIN FETCH m.company")
     List<Medicine> findAllWithCompany();
 
-    // Find all medicines with all relationships
+    // Find all medicines with all relationships (fixed to avoid MultipleBagFetchException)
     @Query("SELECT DISTINCT m FROM Medicine m "
-            + "LEFT JOIN FETCH m.company "
-            + "LEFT JOIN FETCH m.agents "
-            + "LEFT JOIN FETCH m.sales")
+            + "LEFT JOIN FETCH m.company")
     List<Medicine> findAllWithRelations();
 
-    // Find medicine by ID with all relationships
+    // Find medicine by ID with all relationships (fixed to avoid MultipleBagFetchException)
     @Query("SELECT m FROM Medicine m "
             + "LEFT JOIN FETCH m.company "
-            + "LEFT JOIN FETCH m.agents "
-            + "LEFT JOIN FETCH m.sales "
             + "WHERE m.id = :medicineId")
     Optional<Medicine> findByIdWithRelations(@Param("medicineId") Long medicineId);
 

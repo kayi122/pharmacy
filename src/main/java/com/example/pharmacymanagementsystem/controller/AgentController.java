@@ -1,6 +1,7 @@
 package com.example.pharmacymanagementsystem.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,15 @@ public class AgentController {
         log.info("GET request to fetch all agents");
         List<AgentDTO> agents = agentService.getAllAgents();
         return ResponseEntity.ok(agents);
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Map<String, Object>> getAgentsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        log.info("GET request to fetch agents page {} with size {}", page, size);
+        return ResponseEntity.ok(agentService.getAgentsPaginated(page, size, search));
     }
 
     @GetMapping("/with-relations")

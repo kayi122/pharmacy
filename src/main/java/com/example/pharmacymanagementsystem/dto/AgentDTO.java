@@ -22,6 +22,9 @@ public class AgentDTO {
     private String lastName;
     private String email;
     private String phone;
+    
+    // Company information
+    private Long companyId;
     private String companyName;
 
     // Location information
@@ -41,7 +44,11 @@ public class AgentDTO {
         this.lastName = agent.getLastName();
         this.email = agent.getEmail();
         this.phone = agent.getPhone();
-        this.companyName = agent.getCompanyName();
+        
+        if (agent.getCompany() != null) {
+            this.companyId = agent.getCompany().getId();
+            this.companyName = agent.getCompany().getName();
+        }
 
         if (agent.getLocation() != null) {
             this.locationId = agent.getLocation().getId();

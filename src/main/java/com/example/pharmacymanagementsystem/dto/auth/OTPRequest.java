@@ -1,6 +1,6 @@
 package com.example.pharmacymanagementsystem.dto.auth;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import lombok.*;
 
 @Data

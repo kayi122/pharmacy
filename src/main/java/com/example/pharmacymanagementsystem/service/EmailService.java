@@ -74,6 +74,28 @@ public class EmailService {
         }
     }
 
+    public void sendPasswordResetLink(String to, String resetLink) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject("Password Reset Request - Pharmacy Management System");
+            message.setText(
+                    "You requested to reset your password.\n\n" +
+                            "Click the link below to reset your password:\n" +
+                            resetLink + "\n\n" +
+                            "This link will expire in 1 hour.\n\n" +
+                            "If you didn't request this, please ignore this email.\n\n" +
+                            "Best regards,\n" +
+                            "Pharmacy Management System");
+
+            mailSender.send(message);
+            log.info("Password reset link sent to: {}", to);
+        } catch (Exception e) {
+            log.error("Failed to send password reset link: {}", e.getMessage());
+            log.warn("Email service unavailable, reset link for user: {}", to);
+        }
+    }
+
     public void sendVerificationCode(String to, String code) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();

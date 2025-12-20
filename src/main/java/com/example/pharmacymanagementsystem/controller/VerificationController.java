@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -19,7 +20,9 @@ public class VerificationController {
     public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         otpService.generateAndSendOTP(email);
-        return ResponseEntity.ok(Map.of("message", "OTP sent successfully"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "OTP sent successfully");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify-otp")
@@ -29,9 +32,13 @@ public class VerificationController {
         
         try {
             boolean verified = otpService.verifyOTP(email, code);
-            return ResponseEntity.ok(Map.of("verified", verified));
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("verified", verified);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
@@ -39,7 +46,9 @@ public class VerificationController {
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         otpService.generateAndSendVerificationCode(email);
-        return ResponseEntity.ok(Map.of("message", "Verification code sent successfully"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Verification code sent successfully");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify-verification-code")
@@ -49,9 +58,13 @@ public class VerificationController {
         
         try {
             boolean verified = otpService.verifyVerificationCode(email, code);
-            return ResponseEntity.ok(Map.of("verified", verified));
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("verified", verified);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
@@ -59,7 +72,9 @@ public class VerificationController {
     public ResponseEntity<?> sendTwoFactorCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         otpService.generateAndSendTwoFactorCode(email);
-        return ResponseEntity.ok(Map.of("message", "Two-factor authentication code sent successfully"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Two-factor authentication code sent successfully");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify-2fa-code")
@@ -69,9 +84,13 @@ public class VerificationController {
         
         try {
             boolean verified = otpService.verifyTwoFactorCode(email, code);
-            return ResponseEntity.ok(Map.of("verified", verified));
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("verified", verified);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 }

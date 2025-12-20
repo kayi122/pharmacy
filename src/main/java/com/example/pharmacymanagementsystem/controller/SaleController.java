@@ -1,6 +1,7 @@
 package com.example.pharmacymanagementsystem.controller;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,36 @@ import lombok.extern.slf4j.Slf4j;
 public class SaleController {
 
     private final SaleService saleService;
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Map<String, Object>> getSalesPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        log.info("GET request to fetch sales page {} with size {}", page, size);
+        List<SaleDTO> allSales = saleService.getAllSalesWithDetails();
+        
+        if (search != null && !search.isEmpty()) {
+            String searchLower = search.toLowerCase();
+            allSales = allSales.stream()
+                .filter(s -> (s.getCustomerName() != null && s.getCustomerName().toLowerCase().contains(searchLower)) ||
+                            (s.getCustomerPhone() != null && s.getCustomerPhone().contains(search)) ||
+                            (s.getMedicineName() != null && s.getMedicineName().toLowerCase().contains(searchLower)))
+                .collect(java.util.stream.Collectors.toList());
+        }
+        
+        int start = page * size;
+        int end = Math.min(start + size, allSales.size());
+        List<SaleDTO> pageSales = allSales.subList(start, end);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", pageSales);
+        response.put("currentPage", page);
+        response.put("totalItems", allSales.size());
+        response.put("totalPages", (int) Math.ceil((double) allSales.size() / size));
+        
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping
     public ResponseEntity<List<SaleDTO>> getAllSales() {
@@ -300,9 +331,9 @@ public class SaleController {
         log.info("GET request to get sales statistics");
         long totalSales = saleService.countAllSales();
         Double totalRevenue = saleService.getTotalRevenue();
-        return ResponseEntity.ok(Map.of(
-            "totalSales", totalSales,
-            "totalRevenue", totalRevenue != null ? totalRevenue : 0.0
-        ));
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalSales", totalSales);
+        stats.put("totalRevenue", totalRevenue != null ? totalRevenue : 0.0);
+        return ResponseEntity.ok(stats);
     }
 }
